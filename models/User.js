@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
         values: ['Employer', 'Jobsekeer'],
         message: 'Role must be employer or jobsekeer'
       },
-      required: true
+    required: true
     },
     phone: {
       type: String,

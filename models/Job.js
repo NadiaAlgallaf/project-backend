@@ -4,29 +4,35 @@ const jobSchema = new mongoose.Schema({
 
     jobTitle: {
         tpye: String,
-        required: true
+        required: true, 
+        trim: true
+
     },
     companyName: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     jobDescription: {
         type: String, 
-        required: true 
+        required: true,
+        trim: true
     },
     jobType: {
+        type: String,
         enum: ["Full-time", "Part-time","Contract","Remote"],
         required: true 
 
     },
     location: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
-    Salary: {
+    salary: {
         type: Number,
         required: true,
-        minimum: 300
+        min: 300
 
     },
     createdBy: {
@@ -40,27 +46,3 @@ const jobSchema = new mongoose.Schema({
 
 
 module.exports = mongoose.model("Job", jobSchema);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const Job = mongoose.model("Job", jobSchema);
-
-module.exports = Job

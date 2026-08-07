@@ -1,79 +1,146 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
+// ==========================
+// Register User
+// ==========================
 async function signUp(req, res) {
   try {
-    const { username, password } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      role,
+      phone,
+    } = req.body;
 
-    // Validation
-    if (!username || !password) return res.status(400).json({message: "Username and password are required.",});
-    if (password.length < 6) return res.status(400).json({message: "Password must be more than 6 characters",});
+    // Validate required fields
+    if (!firstName || !lastName || !email || !password || !role) {
+      return res.status(400).json({
+        message: "Please fill in all required fields.",
+      });
+    }
 
-    const user = await User.create({
-      username,
-      hashedPassword: await bcrypt.hash(password, 12),
+    // Password validation
+    if (password.length < 8) {
+      return res.status(400).json({
+        message: "Password must be at least 8 characters.",
+      });
+    }
+
+    // Check if email already exists
+    const existingUser = await User.findOne({
+      email: email.toLowerCase().trim(),
     });
 
-    const { _id, createdAt, updatedAt } = user;
+    if (existingUser) {
+      return res.status(409).json({
+        message: "Email already exists.",
+      });
+    }
 
-    res
-      .status(201)
-      .json({ username: user.username, _id, createdAt, updatedAt });
+    // Create user
+    const user = await User.create({
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: email.toLowerCase().trim(),
+      hashedPassword: await bcrypt.hash(password, 12),
+      role,
+      phone: phone?.trim(),
+    });
+
+    return res.status(201).json({
+      message: "User registered successfully.",
+      user: {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        phone: user.phone,
+        createdAt: user.createdAt,
+      },
+    });
   } catch (err) {
-    console.log(err);
+    console.error(err);
+
     if (err.name === "ValidationError") {
       return res.status(400).json({
         message: err.message,
       });
     }
+
     if (err.code === 11000) {
       return res.status(409).json({
-        message: "Username already exists",
+        message: "Email already exists.",
       });
     }
 
-    console.log(err);
     return res.status(500).json({
       message: "Internal Server Error",
     });
   }
 }
 
+// ==========================
+// Login User
+// ==========================
 async function signIn(req, res) {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!username || !password) {
+    if (!email || !password) {
       return res.status(400).json({
-        message: "Username and password are required.",
+        message: "Email and password are required.",
       });
     }
-    const user = await User.findOne({ username:username.toLowerCase().trim() });
+
+    const user = await User.findOne({
+      email: email.toLowerCase().trim(),
+    });
+
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials." });
+      return res.status(401).json({
+        message: "Invalid email or password.",
+      });
     }
 
     const isPasswordCorrect = await bcrypt.compare(
       password,
-      user.hashedPassword,
+      user.hashedPassword
     );
+
     if (!isPasswordCorrect) {
-      return res.status(401).json({ message: "Invalid credentials." });
+      return res.status(401).json({
+        message: "Invalid email or password.",
+      });
     }
 
-    // Construct the payload
-    const payload = { username: user.username, _id: user._id };
+    // JWT Payload
+    const payload = {
+      _id: user._id,
+      email: user.email,
+      role: user.role,
+    };
 
+    const accessToken = jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
 
-    const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
     return res.status(200).json({
       accessToken,
       user: {
         _id: user._id,
-        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
       },
     });
   } catch (err) {
@@ -85,6 +152,9 @@ async function signIn(req, res) {
   }
 }
 
+// ==========================
+// Verify Logged-in User
+// ==========================
 async function verifyUser(req, res) {
   try {
     const user = await User.findById(req.user._id);
@@ -96,8 +166,14 @@ async function verifyUser(req, res) {
     }
 
     return res.status(200).json({
+      user: {
         _id: user._id,
-        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        phone: user.phone,
+      },
     });
   } catch (err) {
     console.error(err);

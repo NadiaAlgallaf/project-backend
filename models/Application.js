@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 
 const applicationSchema = new mongoose.Schema({
@@ -33,6 +33,5 @@ status: {
 
 applicationSchema.index({ applicant: 1, job: 1 }, { unique: true })
 
-const Application = mongoose.model("Application", applicationSchema);
+module.exports = mongoose.model("Application", applicationSchema);
 
-export default Application

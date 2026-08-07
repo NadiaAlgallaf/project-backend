@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import validator from "validator";
 
 
+
+
 const userSchema = new mongoose.Schema(
   {
 
@@ -56,4 +58,4 @@ userSchema.set("toJSON", {
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = User;
+export default User

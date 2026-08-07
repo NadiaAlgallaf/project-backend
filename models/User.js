@@ -1,23 +1,20 @@
-import mongoose from "mongoose";
-import validator from "validator";
-
-
-
+const mongoose = require("mongoose");
+const validator = require("validator");
 
 const userSchema = new mongoose.Schema(
   {
-
     firstName: {
       type: String,
       required: [true, "First name is required"],
-      trim: true
+      trim: true,
     },
 
     lastName: {
       type: String,
       required: [true, "Last name is required"],
-      trim: true
+      trim: true,
     },
+
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -27,35 +24,35 @@ const userSchema = new mongoose.Schema(
       validate: {
         validator: validator.isEmail,
         message: "Please provide a valid email address",
-      }
+      },
     },
+
     hashedPassword: {
       type: String,
-      required: true
+      required: true,
     },
 
     role: {
       type: String,
       enum: {
-        values: ['Employer', 'Jobsekeer'],
-        message: 'Role must be employer or jobsekeer'
+        values: ["Employer", "JobSeeker"],
+        message: "Role must be Employer or JobSeeker",
       },
-    required: true
+      required: true,
     },
+
     phone: {
       type: String,
       trim: true,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 userSchema.set("toJSON", {
-  transform: (document, returnedObject) => {
+  transform: (doc, returnedObject) => {
     delete returnedObject.hashedPassword;
   },
 });
 
-const User = mongoose.model("User", userSchema);
-
-export default User
+module.exports = mongoose.model("User", userSchema);

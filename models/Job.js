@@ -29,7 +29,7 @@ const jobSchema = new mongoose.Schema({
         minimum: 300
 
     },
-    Admin: {
+    createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,

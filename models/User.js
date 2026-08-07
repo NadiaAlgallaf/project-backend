@@ -1,17 +1,48 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+import validator from "validator";
+
 
 const userSchema = new mongoose.Schema(
   {
-    username: {
+
+    firstName: {
       type: String,
-      required: true,
+      required: [true, "First name is required"],
+      trim: true
+    },
+
+    lastName: {
+      type: String,
+      required: [true, "Last name is required"],
+      trim: true
+    },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
       unique: true,
+      lowercase: true,
       trim: true,
-      lowercase:true
+      validate: {
+        validator: validator.isEmail,
+        message: "Please provide a valid email address",
+      }
     },
     hashedPassword: {
       type: String,
       required: true
+    },
+
+    role: {
+      type: String,
+      enum: {
+        values: ['Employer', 'Jobsekeer'],
+        message: 'Role must be employer or jobsekeer'
+      },
+      required: true
+    },
+    phone: {
+      type: String,
+      trim: true,
     },
   },
   { timestamps: true },

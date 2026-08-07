@@ -6,7 +6,7 @@
 
 ## Technologies Used 
 
-# Frontend
+#### Frontend
 
 - React
 - React Router
@@ -15,7 +15,7 @@
 - Context API
 - JWT Authentication
 
-# Backend
+#### Backend
 
 - Node.js
 - Express.js
@@ -23,7 +23,7 @@
 - Mongoose
 - JWT
 - bcrypt
-- dotenv
+
 
 
 ## Getting Started

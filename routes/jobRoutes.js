@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 const verifyToken = require("../middleware/verifyToken");
+const validateObjectId = require("../middleware/validateObjectId");
 const authorizeRole = require("../middleware/authorizeRole");
 
 const {
@@ -13,8 +14,8 @@ const {
   deleteJob,
 } = require("../controllers/jobController");
 
-// GET all jobs (Public)
-// POST create a job (Employers only)
+// GET all jobs - Public
+// POST create a job - Employers only
 router
   .route("/")
   .get(getAllJobs)
@@ -24,21 +25,26 @@ router
     createJob
   );
 
-// GET single job (Public)
-// update job (Owner Employer only)
-// DELETE job (Owner Employer only)
+// GET single job - Public
+// PATCH update job - Owner Employer only
+// DELETE job - Owner Employer only
 router
   .route("/:id")
-  .get(getJob)
+  .get(
+    validateObjectId,
+    getJob
+  )
   .patch(
     verifyToken,
+    validateObjectId,
     authorizeRole("Employer"),
     updateJob
   )
   .delete(
     verifyToken,
+    validateObjectId,
     authorizeRole("Employer"),
     deleteJob
-  )
+  );
 
-module.exports = router 
+module.exports = router;

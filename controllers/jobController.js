@@ -1,10 +1,10 @@
-import Job from "../models/Job";
+import Job from "../models/Job.js";
 
 
 // Create Job 
 export const createJob = async (req, res) => {
   try {
-    req.body.createdBy = req.user.userId
+    req.body.createdBy = req.user._id
 
     const job = await Job.create(req.body)
 
@@ -134,3 +134,4 @@ export const deleteJob = async (req, res) => {
     })
   }
 }
+

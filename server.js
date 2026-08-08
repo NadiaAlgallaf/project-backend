@@ -1,13 +1,14 @@
-const app = require('./app.js')
-const connectToDB = require('./config/db.js')
+import app from "./app.js";
+import connectToDB from "./config/db.js";
 
-// connect to database and listen on Port 3000
 async function startServer() {
-    const PORT = process.env.PORT || 3000;
-    await connectToDB();
+  const PORT = process.env.PORT || 3000;
 
-    app.listen(PORT, () => {
-        console.log(`App is running on port ${PORT}`);
-    });
+  await connectToDB();
+
+  app.listen(PORT, () => {
+    console.log(`App is running on port ${PORT}`);
+  });
 }
+
 startServer();

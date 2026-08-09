@@ -1,7 +1,6 @@
-import Job from "../models/Job.js";
+import Job from '../models/Job.js'
 
-
-// Create Job 
+// Create Job
 export const createJob = async (req, res) => {
   try {
     req.body.createdBy = req.user._id
@@ -10,12 +9,12 @@ export const createJob = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      job,
+      job
     })
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.message
     })
   }
 }
@@ -23,22 +22,22 @@ export const createJob = async (req, res) => {
 // GET all job
 export const getAllJobs = async (req, res) => {
   try {
-    const jobs = await Job.find().sort("-createdAt")
+    const jobs = await Job.find().sort('-createdAt')
 
     res.status(200).json({
       success: true,
       count: jobs.length,
-      jobs,
+      jobs
     })
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.message
     })
   }
 }
 
-// GET job by ID 
+// GET job by ID
 export const getJob = async (req, res) => {
   try {
     const job = await Job.findById(req.params.id)
@@ -46,18 +45,18 @@ export const getJob = async (req, res) => {
     if (!job) {
       return res.status(404).json({
         success: false,
-        message: "Job not found",
+        message: 'Job not found'
       })
     }
 
     res.status(200).json({
       success: true,
-      job,
-    });
+      job
+    })
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.message
     })
   }
 }
@@ -70,68 +69,83 @@ export const updateJob = async (req, res) => {
     if (!job) {
       return res.status(404).json({
         success: false,
-        message: "Job not found",
+        message: 'Job not found'
       })
     }
 
     if (job.createdBy.toString() !== req.user._id) {
       return res.status(403).json({
         success: false,
-        message: "You are not authorized to update this job",
+        message: 'You are not authorized to update this job'
       })
     }
 
-    const updatedJob = await Job.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    )
+    const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    })
 
     res.status(200).json({
       success: true,
-      job: updatedJob,
+      job: updatedJob
     })
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.message
     })
   }
 }
 
 export const deleteJob = async (req, res) => {
   try {
-    const job = await Job.findById(req.params.id);
+    const job = await Job.findById(req.params.id)
 
     if (!job) {
       return res.status(404).json({
         success: false,
-        message: "Job not found",
-      });
+        message: 'Job not found'
+      })
     }
 
     // Only the employer who created the job can delete it
     if (job.createdBy.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
-        message: "You are not authorized to delete this job",
-      });
+        message: 'You are not authorized to delete this job'
+      })
     }
 
-    await job.deleteOne();
+    await job.deleteOne()
 
     res.status(200).json({
       success: true,
-      message: "Job deleted successfully",
-    });
+      message: 'Job deleted successfully'
+    })
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message,
-    });
+      message: error.message
+    })
   }
-};
+}
 
+// GET my jobs
+export const getMyJobs = async (req, res) => {
+  try {
+    const jobs = await Job.find({
+      createdBy: req.user._id
+    })
+
+    res.status(200).json({
+      success: true,
+      count: jobs.length,
+      jobs
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}

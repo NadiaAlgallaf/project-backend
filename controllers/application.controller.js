@@ -145,3 +145,37 @@ export const updateApplicationStatus = async (req, res) => {
     })
   }
 }
+
+// Delete - Withdraw application
+export const deleteApplication = async (req, res) => {
+  try {
+    const application = await Application.findById(req.params.id)
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: 'Application not found'
+      })
+    }
+
+    // Only the applicant can withdraw their application
+    if (application.applicant.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'You are not authorized to withdraw this application'
+      })
+    }
+
+    await application.deleteOne()
+
+    res.status(200).json({
+      success: true,
+      message: 'Application withdrawn successfully'
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}

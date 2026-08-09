@@ -6,7 +6,8 @@ const {
   createApplication,
   getMyApplications,
   getJobApplications,
-  updateApplicationStatus
+  updateApplicationStatus,
+  deleteApplication
 } = require('../controllers/application.controller')
 
 // Create application (Jobseeker)
@@ -34,6 +35,14 @@ router.put(
   verifyToken,
   authorizeRole('Employer'),
   updateApplicationStatus
+)
+
+//withdraw from application (Jobseeker)
+router.delete(
+  '/:id',
+  verifyToken,
+  authorizeRole('JobSeeker'),
+  deleteApplication
 )
 
 module.exports = router

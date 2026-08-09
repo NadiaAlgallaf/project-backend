@@ -11,7 +11,8 @@ const {
   getAllJobs,
   getJob,
   updateJob,
-  deleteJob
+  deleteJob,
+  getMyJobs
 } = require('../controllers/jobController')
 
 // GET all jobs - Public
@@ -20,6 +21,9 @@ router
   .route('/')
   .get(getAllJobs)
   .post(verifyToken, authorizeRole('Employer'), createJob)
+
+// GET my jobs - Employer only
+router.route('/my-jobs').get(verifyToken, authorizeRole('Employer'), getMyJobs)
 
 // GET single job - Public
 // PATCH update job - Owner Employer only

@@ -1,4 +1,5 @@
 import Job from '../models/Job.js'
+import Application from '../models/Application.js'
 
 // Create Job
 export const createJob = async (req, res) => {
@@ -137,10 +138,24 @@ export const getMyJobs = async (req, res) => {
       createdBy: req.user._id
     })
 
+    //count the number of applicants
+    const jobWithCount = []
+
+    for (let job of jobs) {
+      const applicationCount = await Application.countDocuments({
+        job: job._id
+      })
+
+      jobWithCount.push({
+        ...job.toObject(),
+        applicationCount: applicationCount
+      })
+    }
+
     res.status(200).json({
       success: true,
-      count: jobs.length,
-      jobs
+      count: jobWithCount.length,
+      jobs: jobWithCount
     })
   } catch (error) {
     res.status(500).json({

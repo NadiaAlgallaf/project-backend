@@ -1,41 +1,38 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
 const applicationSchema = new mongoose.Schema(
   {
     applicant: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      ref: 'User',
+      required: true
     },
 
     job: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Job",
-      required: true,
+      ref: 'Job',
+      required: true
     },
 
     resumeUrl: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
 
     status: {
       type: String,
-      enum: ["Pending", "Reviewed", "Accepted", "Rejected"],
-      default: "Pending",
-    },
+      enum: ['Pending', 'Reviewed', 'Interview', 'Accepted', 'Rejected'],
+      default: 'Pending'
+    }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
-);
+)
 
-applicationSchema.index(
-  { applicant: 1, job: 1 },
-  { unique: true }
-);
+applicationSchema.index({ applicant: 1, job: 1 }, { unique: true })
 
-const Application = mongoose.model("Application", applicationSchema);
+const Application = mongoose.model('Application', applicationSchema)
 
-export default Application;
+export default Application

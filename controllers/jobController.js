@@ -20,10 +20,22 @@ export const createJob = async (req, res) => {
   }
 }
 
-// GET all job
+// GET all jobs + filter jobs
 export const getAllJobs = async (req, res) => {
   try {
-    const jobs = await Job.find().sort('-createdAt')
+    const { jobCategory, jobType } = req.query
+
+    const filter = {}
+
+    if (jobCategory) {
+      filter.jobCategory = jobCategory
+    }
+
+    if (jobType) {
+      filter.jobType = jobType
+    }
+
+    const jobs = await Job.find(filter).sort('-createdAt')
 
     res.status(200).json({
       success: true,

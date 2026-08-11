@@ -35,7 +35,7 @@ export const getAllJobs = async (req, res) => {
       filter.jobType = jobType
     }
 
-    const jobs = await Job.find(filter).sort('-createdAt')
+    const jobs = await Job.find(filter).populate("createdBy","firstName lastName companyLogo").sort("-createdAt")
 
     res.status(200).json({
       success: true,

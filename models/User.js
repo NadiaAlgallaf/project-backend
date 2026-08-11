@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    companyLogo: {
+  type: String,
+  trim: true,
+},
   },
   {
     timestamps: true,

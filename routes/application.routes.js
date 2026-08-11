@@ -7,6 +7,7 @@ const {
   getMyApplications,
   getJobApplications,
   updateApplicationStatus,
+  updateInterviewDate,
   deleteApplication
 } = require('../controllers/application.controller')
 
@@ -35,6 +36,14 @@ router.put(
   verifyToken,
   authorizeRole('Employer'),
   updateApplicationStatus
+)
+
+//Update interview date (Employer)
+router.put(
+  '/:id/interview-date',
+  verifyToken,
+  authorizeRole('Employer'),
+  updateInterviewDate
 )
 
 //withdraw from application (Jobseeker)

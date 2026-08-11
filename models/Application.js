@@ -24,6 +24,11 @@ const applicationSchema = new mongoose.Schema(
       type: String,
       enum: ['Pending', 'Reviewed', 'Interview', 'Accepted', 'Rejected'],
       default: 'Pending'
+    },
+
+    interviewDate: {
+      type: Date,
+      default: null
     }
   },
   {

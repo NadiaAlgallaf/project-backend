@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import validator from "validator" 
 
 
 async function signUp(req, res) {
@@ -12,12 +13,28 @@ async function signUp(req, res) {
       password,
       role,
       phone,
+      companyLogo,
     } = req.body
 
     // Validate required fields
     if (!firstName || !lastName || !email || !password || !role) {
       return res.status(400).json({
         message: "Please fill in all required fields.",
+      })
+    }
+
+    // Employers must provide a company logo 
+    if (role === "Employer" && !companyLogo){
+      return res.status(400).json({
+        message: "Company logo URL is required for Employers.",
+      })
+    }
+
+    // Validate company logo URL 
+
+    if (companyLogo && !validator.isURL(companyLogo)){
+      return res.status(400).json({
+        message: "Please provide a valid company logo URL. "
       })
     }
 
@@ -47,6 +64,7 @@ async function signUp(req, res) {
       hashedPassword: await bcrypt.hash(password, 12),
       role,
       phone: phone?.trim(),
+      companyLogo: companyLogo?.trim(), 
     })
 
     return res.status(201).json({
@@ -58,6 +76,7 @@ async function signUp(req, res) {
         email: user.email,
         role: user.role,
         phone: user.phone,
+        companyLogo: user.companyLogo,
         createdAt: user.createdAt,
       },
     })
@@ -137,6 +156,7 @@ async function signIn(req, res) {
         lastName: user.lastName,
         email: user.email,
         role: user.role,
+        companyLogo: user.companyLogo,
       },
     })
   } catch (err) {
@@ -167,6 +187,7 @@ async function verifyUser(req, res) {
         email: user.email,
         role: user.role,
         phone: user.phone,
+        companyLogo: user.companyLogo,
       },
     })
   } catch (err) {

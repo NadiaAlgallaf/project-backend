@@ -9,7 +9,8 @@ const cors = require('cors')
 const authRoutes = require('./routes/auth.routes')
 const jobRoutes = require('./routes/jobRoutes')
 const ApplicationRoutes = require('./routes/application.routes')
-
+const dns = require("dns")
+dns.setServers(["8.8.8.8", "1.1.1.1"])
 // Middleware
 app.use(
   cors({

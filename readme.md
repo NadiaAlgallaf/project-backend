@@ -10,6 +10,39 @@ Career Connect also provides job search and filtering based on job categories su
 
 ## Screenshots
 
+#### Home Page 
+![alt text](image-1.png) 
+
+![alt text](image-2.png)
+
+![alt text](image-3.png)
+
+### Jobs Page 
+
+![alt text](image-4.png)
+
+![alt text](image-5.png) 
+
+#### Job Seeker dashboard page 
+
+![alt text](image-6.png)
+
+#### Job application page 
+
+![alt text](image-7.png)
+
+#### Employer dashboard page 
+
+![alt text](image-8.png)
+
+#### Jobs created by Employer : 
+
+![alt text](image-9.png)
+
+#### Application page where the Employer can view / accept / reject and booked an interview with the applicants  
+
+![alt text](image-10.png)
+
 ## Technologies Used 
 
 #### Frontend
@@ -30,12 +63,6 @@ Career Connect also provides job search and filtering based on job categories su
 - JWT
 - bcrypt
 
-
-
-## Getting Started
-
-
-## Installation
 
 ## User Stories
 
@@ -89,7 +116,7 @@ Career Connect also provides job search and filtering based on job categories su
 
 ## Database Design
 
-
+![alt text](image.png)
 
 ## Routes
 
@@ -146,4 +173,3 @@ Career Connect also provides job search and filtering based on job categories su
 - Advanced Job Search — Add additional filters such as salary range, location, experience level, and remote/hybrid opportunities.
 - Job Recommendations — Recommend relevant job opportunities to Job Seekers based on their profile, skills, and preferred job categories. 
 
-## Credits
